@@ -1,6 +1,6 @@
 {
   "name": "lambdaview",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "command-line to view AWS Lambda function details",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,11 @@
   },
   "bin": {
     "lambdaview": "./index.js"
-  }
+  },
+  "keywords": [
+    "AWS",
+    "Lambda",
+    "CloudWatch",
+    "Logs"
+  ],
 }
