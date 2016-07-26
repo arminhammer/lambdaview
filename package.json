@@ -1,0 +1,19 @@
+{
+  "name": "lambdaview",
+  "version": "0.0.1",
+  "description": "command-line to view AWS Lambda function details",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Armin Graf",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "aws-sdk": "^2.4.9",
+    "colors": "^1.1.2",
+    "yargs": "^4.8.1"
+  },
+  "bin": {
+    "lambdaview": "./index.js"
+  }
+}
