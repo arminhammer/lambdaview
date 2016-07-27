@@ -34,6 +34,20 @@ let output = {
   events: []
 }
 
+function createBuffer() {
+  return {
+    lines: [],
+    requestId: '',
+    startTime: 0,
+    version: '',
+    endTime: 0,
+    duration: '',
+    billedDuration: '',
+    memorySize: '',
+    maxMemoryUsed: ''
+  }
+}
+
 let logGroupName = ''
 
 let promise = lambda.getFunction({
@@ -71,21 +85,17 @@ promise.then((data) => {
 })
 .then((data) => {
   data.map((event) => {
-    let buffer = {
-      lines: []
-    }
+    let buffer = createBuffer()
     let passedReport = false
     event.events.map((line) => {
       if(line.message.startsWith('START')) {
-        if(buffer.lines.length > 0) {
+        if(buffer.lines.length > 0 && buffer.startTime) {
           output.events.push(buffer)
+          buffer = createBuffer()
+          passedReport = false
         }
-        buffer = {
-          lines: []
-        }
-        passedReport = false
         buffer.startTime = line.timestamp
-        let matches = line.message.match(/RequestId: ([0-9A-Za-z]+-[0-9A-Za-z]+-[0-9A-Za-z]+-[0-9A-Za-z]+-[0-9A-Za-z]+) Version: ([A-Za-z0-9$]+)/)
+        let matches = line.message.match(/RequestId: ([0-9A-Za-z-]+) Version: ([A-Za-z0-9$]+)/)
         buffer.requestId = matches[1]
         buffer.version = matches[2]
       } else if (line.message.startsWith('END')) {
@@ -103,7 +113,7 @@ promise.then((data) => {
             buffer.errors = []
           }
           buffer.errors.push(line)
-        } else if(line.message.includes('errorMessage') || line.message.includes('Exception')) {
+        } else if(line.message.includes('errorMessage') || line.message.includes('Exception') || line.message.includes('Error')) {
           if(!buffer.errors) {
             buffer.errors = []
           }
@@ -130,6 +140,12 @@ function printOutput(output) {
     else return 0
   })
   output.events.map((event) => {
+    // TODO highlight max memory
+    // TODO print out IAM policy
+    // TODO add truncation of log messages
+    // TODO just print out errors
+    // TODO check for 'Error' pattern
+    // TODO print out handler code
     console.log(new Date(event.startTime).toString().cyan.bold + ' ' + event.requestId.yellow.bold +' ' + event.maxMemoryUsed.toString().bgGreen.white.bold+'MB'.bgGreen.white.bold + ' ' + event.duration.white.bgMagenta.bold + ' ' + event.billedDuration.white.bgBlue.bold)
     event.lines.map((line) => {
       console.log(new Date(line.timestamp).toString().green + ' ' + line.message.trim())
