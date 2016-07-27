@@ -21,5 +21,8 @@
     "Lambda",
     "CloudWatch",
     "Logs"
-  ]
+  ],
+  "devDependencies": {
+    "standard": "^7.1.2"
+  }
 }
