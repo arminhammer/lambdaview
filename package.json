@@ -1,6 +1,6 @@
 {
   "name": "lambdaview",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "command-line to view AWS Lambda function details",
   "main": "index.js",
   "scripts": {

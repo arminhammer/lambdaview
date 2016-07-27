@@ -128,12 +128,11 @@ function printOutput (output) {
     else return 0
   })
   output.events.map((event) => {
-    // TODO highlight max memory
     // TODO print out IAM policy
     // TODO add truncation of log messages
     // TODO just print out errors
     // TODO print out handler code
-    console.log(colors.cyan.bold(new Date(event.startTime).toString()) + ' ' + colors.yellow.bold(event.requestId) + ' ' + colors.bgGreen.white.bold(event.maxMemoryUsed.toString() + 'MB') + ' ' + colors.white.bgMagenta.bold(event.duration + 'ms') + ' ' + colors.white.bgBlue.bold(event.billedDuration + 'ms'))
+    console.log(colors.cyan.bold(new Date(event.startTime).toString()) + ' ' + colors.yellow.bold(event.requestId) + ' ' + colors.bgWhite.black.bold(event.maxMemoryUsed.toString() + 'MB') + '/' + colors.bgGreen.white.bold(output.MemorySize + 'MB') + ' ' + colors.white.bgMagenta.bold(event.duration + 'ms') + ' ' + colors.white.bgBlue.bold(event.billedDuration + 'ms'))
     event.lines.map((line) => {
       console.log(new Date(line.timestamp).toString().green + ' ' + line.message.trim())
     })
