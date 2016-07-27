@@ -101,7 +101,7 @@ promise.then((data) => {
       } else if (line.message.startsWith('END')) {
         buffer.endTime = line.timestamp
       } else if (line.message.startsWith('REPORT')) {
-        let matches = line.message.match(/RequestId: [0-9A-Za-z-]+\tDuration: (\d+.\d+ ms)\tBilled Duration: (\d+ ms) \tMemory Size: (\d+ MB)\tMax Memory Used: (\d+ MB)/)
+        let matches = line.message.match(/RequestId: [0-9A-Za-z-]+\tDuration: (\d+.\d+) ms\tBilled Duration: (\d+ ms) \tMemory Size: (\d+ MB)\tMax Memory Used: (\d+ MB)/)
         buffer.duration = matches[1]
         buffer.billedDuration = matches[2]
         buffer.memorySize = matches[3]
@@ -133,7 +133,7 @@ promise.then((data) => {
 })
 
 function printOutput(output) {
-  console.log(output.FunctionName.green + ': ' + output.FunctionArn.yellow + ' ' + output.Runtime.white.bgMagenta.bold + ' ' + output.MemorySize.toString().bgGreen.white.bold+'MB'.bgGreen.white.bold + ' ' + output.Timeout.toString().bgCyan.white.bold + 'secs'.bgCyan.white.bold + ' ' + output.Version.bgYellow.white.bold + '\n')
+  console.log(colors.green(output.FunctionName) + ': ' + colors.yellow(output.FunctionArn) + ' ' + colors.white.bgMagenta.bold(output.Runtime) + ' ' + colors.bgGreen.white.bold(output.MemorySize.toString()+'MB') + ' ' + colors.bgCyan.white.bold(output.Timeout.toString() + 'secs') + ' ' + colors.bgYellow.white.bold(output.Version) + '\n')
   output.events.sort((a, b) => {
     if(a.startTime < b.startTime) return -1
     else if(a.startTime > b.startTime) return 1
@@ -144,9 +144,8 @@ function printOutput(output) {
     // TODO print out IAM policy
     // TODO add truncation of log messages
     // TODO just print out errors
-    // TODO check for 'Error' pattern
     // TODO print out handler code
-    console.log(new Date(event.startTime).toString().cyan.bold + ' ' + event.requestId.yellow.bold +' ' + event.maxMemoryUsed.toString().bgGreen.white.bold+'MB'.bgGreen.white.bold + ' ' + event.duration.white.bgMagenta.bold + ' ' + event.billedDuration.white.bgBlue.bold)
+    console.log(colors.cyan.bold(new Date(event.startTime).toString()) + ' ' + colors.yellow.bold(event.requestId) +' ' + colors.bgGreen.white.bold(event.maxMemoryUsed.toString()+'MB') + ' ' + colors.white.bgMagenta.bold(event.duration + 'ms') +' ' + colors.white.bgBlue.bold(event.billedDuration))
     event.lines.map((line) => {
       console.log(new Date(line.timestamp).toString().green + ' ' + line.message.trim())
     })
